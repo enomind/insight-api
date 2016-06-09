@@ -48,7 +48,7 @@
     "base58-native": "0.1.2",
     "bignum": "*",
     "morgan": "*",
-    "bitcore": "git://github.com/enomind/bitcore.git#039d3ebe3d75c875944d1963f792639156c63f63",
+    "bitcore": "git://github.com/enomind/bitcore.git#4c5105663b8f190ca80e0a19a0a4f08e765eaac4",
     "bufferput": "git://github.com/bitpay/node-bufferput.git",
     "buffertools": "*",
     "commander": "^2.3.0",
