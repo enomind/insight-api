@@ -42,6 +42,7 @@ module.exports = function(app) {
 
   // Address property routes
   app.get(apiPrefix + '/addr/:addr/balance', addresses.balance);
+  app.post(apiPrefix + '/addrs/balance', addresses.balances);
   app.get(apiPrefix + '/addr/:addr/totalReceived', addresses.totalReceived);
   app.get(apiPrefix + '/addr/:addr/totalSent', addresses.totalSent);
   app.get(apiPrefix + '/addr/:addr/unconfirmedBalance', addresses.unconfirmedBalance);

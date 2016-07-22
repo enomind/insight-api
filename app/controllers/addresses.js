@@ -220,6 +220,40 @@ exports.balance = function(req, res, next) {
     });
 };
 
+exports.balances = function (req, res, next) {
+   if (!checkSync(req, res)) {
+       return;
+   }
+
+   var as = getAddrs(req, res, next);
+
+   if (as) {
+       var balances = [];
+
+       async.eachLimit(as, RPC_CONCURRENCY, function (a, callback) {
+           a.update(function (err) {
+               if (err) {
+                   callback(err);
+               }
+
+               balances.push({
+                   "address": a.addrStr,
+                   "balance": a.balance,
+                   "unconfirmed_balance": a.unconfirmedBalance
+               });
+               callback();
+
+           }, { ignoreCache: req.param('noCache') });
+
+       }, function (err) { // finished callback
+           if (err) {
+               return common.handleErrors(err, res);
+           }
+           res.jsonp(balances);
+       });
+   }
+};
+
 exports.totalReceived = function(req, res, next) {
   if (!checkSync(req, res)) return;
   var a = getAddr(req, res, next);
