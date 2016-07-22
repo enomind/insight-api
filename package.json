@@ -48,9 +48,7 @@
     "base58-native": "0.1.2",
     "bignum": "*",
     "morgan": "*",
-   // "bitcore": "git://github.com/enomind/bitcore.git#039d3ebe3d75c875944d1963f792639156c63f63",
-
-    "bitcore": "git://github.com/enomind/bitcore.git#feature/litecoin",
+    "bitcore": "git://github.com/enomind/bitcore.git#feature/dogecoin",
     "bufferput": "git://github.com/bitpay/node-bufferput.git",
     "buffertools": "*",
     "commander": "^2.3.0",
