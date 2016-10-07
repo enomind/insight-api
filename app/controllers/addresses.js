@@ -239,7 +239,8 @@ exports.balances = function (req, res, next) {
                balances.push({
                    "address": a.addrStr,
                    "balance": a.balance,
-                   "unconfirmed_balance": a.unconfirmedBalance
+                   "unconfirmed_balance": a.unconfirmedBalance,
+                   "txApperances": a.txApperances
                });
                callback();
 
