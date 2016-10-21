@@ -141,11 +141,15 @@ exports.multitxs = function(req, res, next) {
     if (to < 0) to = 0;
     if (from > nbTxs) from = nbTxs;
     if (to > nbTxs) to = nbTxs;
+    var MAX = 9999999999;
 
     txs.sort(function(a, b) {
-      return (b.ts || b.ts) - (a.ts || a.ts);
+      var b = (b.ts || b.firstSeenTs || MAX) + b.txid;
+      var a = (a.ts || b.firstSeenTs || MAX) + a.txid;
+      if (a > b) return -1;
+      if (a < b) return 1;
+      return 0;
     });
-
     txs = txs.slice(from, to);
 
     var txIndex = {};
@@ -153,21 +157,36 @@ exports.multitxs = function(req, res, next) {
       txIndex[tx.txid] = tx;
     });
 
-    async.eachLimit(txs, RPC_CONCURRENCY, function(tx, callback) {
-      tDb.fromIdWithInfo(tx.txid, function(err, tx) {
+    async.eachLimit(txs, RPC_CONCURRENCY, function(tx2, callback) {
+      tDb.fromIdWithInfo(tx2.txid, function(err, tx) {
         if (err) {
           console.log(err);
           return common.handleErrors(err, res);
         }
         if (tx && tx.info) {
+
+          if (tx2.firstSeenTs)
+            tx.info.firstSeenTs = tx2.firstSeenTs;
+
           txIndex[tx.txid].info = tx.info;
+        } else {
+          // TX no longer available
+          txIndex[tx2.txid].info = {
+            txid: tx2.txid,
+            possibleDoubleSpend: true,
+            firstSeenTs: tx2.firstSeenTs,
+          };
         }
+
         callback();
       });
     }, function(err) {
       if (err) return cb(err);
 
-      var transactions = _.pluck(txs, 'info');
+      // It could be that a txid is stored at an address but it is
+      // no longer at bitcoind (for example a double spend)
+
+      var transactions = _.compact(_.pluck(txs, 'info'));
       transactions = {
         totalItems: nbTxs,
         from: +from,
@@ -187,12 +206,12 @@ exports.multitxs = function(req, res, next) {
     async.eachLimit(as, RPC_CONCURRENCY, function(a, callback) {
       a.update(function(err) {
         if (err) callback(err);
+
         txs.push(a.transactions);
         callback();
       }, {
         ignoreCache: req.param('noCache'),
         includeTxInfo: true,
-        dontFillSpent: true,
       });
     }, function(err) { // finished callback
       if (err) return common.handleErrors(err, res);

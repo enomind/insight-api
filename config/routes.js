@@ -54,6 +54,10 @@ module.exports = function(app) {
   app.get(apiPrefix + '/sync', st.sync);
   app.get(apiPrefix + '/peer', st.peer);
 
+  // Utils route
+  var utils = require('../app/controllers/utils');
+  app.get(apiPrefix + '/utils/estimatefee', utils.estimateFee);
+
   // Currency
   var currency = require('../app/controllers/currency');
   app.get(apiPrefix + '/currency', currency.index);
@@ -62,7 +66,6 @@ module.exports = function(app) {
   if (config.enableEmailstore) {
     var emailPlugin = require('../plugins/emailstore');
     app.get(apiPrefix + '/email/retrieve', emailPlugin.retrieve);
-    app.get(apiPrefix + '/email/retrieve/:email', emailPlugin.oldRetrieve);
   }
 
   // Currency rates plugin
