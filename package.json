@@ -49,7 +49,7 @@
     "bignum": "*",
     "morgan": "*",
 
-    "bitcore": "git://github.com/enomind/bitcore.git#feature/litecoin",
+    "bitcore": "git://github.com/enomind/bitcore.git#feature/litecoin-testnet",
     "bufferput": "git://github.com/bitpay/node-bufferput.git",
     "buffertools": "*",
     "commander": "^2.3.0",
