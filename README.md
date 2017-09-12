@@ -6,7 +6,7 @@ This is a backend-only service. If you're looking for the web frontend applicati
 
 ## Getting Started
 
-```bash
+```bashl
 npm install -g bitcore-node@latest
 bitcore-node create mynode
 cd mynode
@@ -96,6 +96,30 @@ Plug-in support for Insight API is also no longer available, as well as the endp
 - `/rates/:code`
 
 Caching support has not yet been added in the v0.3 upgrade.
+
+## Query Rate Limit
+
+To protect the server, insight-api has a built it query rate limiter. It can be configurable in `bitcore-node.json` with:
+``` json
+  "servicesConfig": {
+    "insight-api": {
+      "rateLimiterOptions": {
+        "whitelist": ["::ffff:127.0.0.1"]
+      }
+    }
+  }
+```
+With all the configuration options available: https://github.com/bitpay/insight-api/blob/master/lib/ratelimiter.js#L10-17
+
+Or disabled entirely with:
+``` json
+  "servicesConfig": {
+    "insight-api": {
+      "disableRateLimiter": true
+    }
+  }
+  ```
+  
 
 ## API HTTP Endpoints
 
@@ -268,6 +292,9 @@ POST params:
 addrs: 2NF2baYuJAkCKo5onjUKEPdARQkZ6SYyKd5,2NAre8sX2povnjy4aeiHKeEh97Qhn97tB1f
 from (optional): 0
 to (optional): 20
+noAsm (optional): 1 (will omit script asm from results)
+noScriptSig (optional): 1 (will omit the scriptSig from all inputs)
+noSpent (option): 1 (will omit spent information per output)
 ```
 
 Sample output:
