@@ -61,14 +61,15 @@
   "bitcoreNode": "lib",
   "dependencies": {
     "async": "*",
+    "bitcoinjs-lib": "https://github.com/bitcoinjs/bitcoinjs-lib.git",
+    "bn.js": "=2.0.4",
     "body-parser": "^1.13.3",
     "compression": "^1.6.1",
+    "consul": "^0.34.1",
     "lodash": "^3.10.1",
     "lru-cache": "^4.0.1",
     "morgan": "^1.7.0",
-    "request": "^2.64.0",
-    "bn.js": "=2.0.4",
-    "bitcoinjs-lib": "https://github.com/bitcoinjs/bitcoinjs-lib.git"
+    "request": "^2.64.0"
   },
   "devDependencies": {
     "chai": "^3.5.0",
